@@ -20,8 +20,9 @@ public class World {
 
     Terrain[][] map = new Terrain[width][height];
 
-    public void updateMap() {
 
+    
+    public void updateMap() {
     }
 
 
@@ -47,6 +48,18 @@ public class World {
             food.add(new Food(x, y, "Bugs"));
         }
 
+    }
+
+    public void eatFood() {
+        for (Creature c : creatures) {
+            for (Food f : food) {
+                if (c.x == f.x && c.y == f.y) {
+                    c.eat(f.type);
+                    food.remove(f);
+                    break;
+                }
+            }
+        }
     }
 
 
