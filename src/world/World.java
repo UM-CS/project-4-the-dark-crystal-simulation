@@ -20,13 +20,6 @@ public class World {
 
     Terrain[][] map = new Terrain[width][height];
 
-
-    
-    public void updateMap() {
-    }
-
-
-
     public void createCreature() {
         int initialSpawn = 5;
         
@@ -94,5 +87,7 @@ public class World {
         for (int i = 0; i < 100; i++) {
             world.roll();
         }
+        world.eatFood();
+        
     }
 }

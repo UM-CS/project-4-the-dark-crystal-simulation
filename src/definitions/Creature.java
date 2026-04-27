@@ -47,8 +47,6 @@ public class Creature {
         if (this.diet.equals(diet)) {
             health += 5;
             System.out.println(name + " has eaten " + diet + " and gained health.");
-        } else {
-            System.out.println(name + " cannot eat " + diet + ".");
         }
     }
     
