@@ -1,5 +1,9 @@
 package definitions;
 
-public class Terrain {
-    public int x, y;
+public enum Terrain {
+    GROUND,
+    RIVER,
+    FOREST,
+    SAND
+
 }

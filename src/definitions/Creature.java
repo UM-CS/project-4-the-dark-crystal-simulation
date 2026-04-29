@@ -1,5 +1,9 @@
 package definitions;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+
 public class Creature {
 
     public int x, y;
@@ -7,14 +11,16 @@ public class Creature {
     public int age;
     public String name;
     public String diet;
+    public Color color;
 
-    public Creature(int x, int y, int health, String name, String diet) {
+    public Creature(int x, int y, int health, String name, String diet, Color color) {
         this.x = x;
         this.y = y;
         this.health = health;
         this.name = name;
         this.diet = diet;
         this.age = 0;
+        this.color = color;
     }
 
     public void lifeCycle() {
@@ -38,7 +44,7 @@ public class Creature {
 
     public Creature reproduce() {
         if (age > 5 && health > 5) {
-            return new Creature(x, y, health, name, diet);
+            return new Creature(x, y, health, name, diet, color);
         }
         return null;
     }
@@ -50,6 +56,17 @@ public class Creature {
         } else {
             System.out.println(name + " cannot eat " + diet + ".");
         }
+    }
+
+    public void draw(Graphics g) {
+        g.setColor(color);
+        int drawX = x * 15 + 4;
+        int drawY = y * 15 + 4;
+        int drawSize = 15 - 8;
+        g.fillRoundRect(drawX, drawY, drawSize, drawSize, 10, 10);
+        g.setFont(new Font("SansSerif", Font.PLAIN, 9));
+        g.setColor(Color.WHITE); 
+        g.drawString(name, drawX + 2, drawY + (drawSize / 2) + 5);
     }
     
 }
