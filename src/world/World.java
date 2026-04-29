@@ -44,7 +44,6 @@ public class World extends JPanel{
             () -> new Fizzgig(r.nextInt(5), r.nextInt(GRID_COUNT), CELL_SIZE),
             () -> new Landstrider(r.nextInt(5), r.nextInt(GRID_COUNT), CELL_SIZE),
             () -> new Nurloc(r.nextInt(5), r.nextInt(GRID_COUNT), CELL_SIZE)
-            
         );
 
         creatures = new ArrayList<>();
@@ -67,6 +66,8 @@ public class World extends JPanel{
             }
             repaint();
         }).start();
+        
+        worldTimer();
     }
          
 
