@@ -7,6 +7,7 @@ public class Creature {
     public int age;
     public String name;
     public String diet;
+    private double deathChance = 0.03;
 
     public Creature(int x, int y, int health, String name, String diet) {
         this.x = x;
@@ -30,11 +31,19 @@ public class Creature {
 
     public boolean die() {
         if (health <= 0 || age > 10) {
-        System.out.println(name + " has died.");
-        return true;
+            System.out.println(name + " has died.");
+            return true;
         }
         return false;
     }
+
+    public boolean randomDeath(){
+        if(Math.random() < deathChance){
+            return true;
+        }
+        return false;
+    }
+    
 
     public Creature reproduce() {
         if (age > 5 && health > 5) {

@@ -2,6 +2,8 @@ package world;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.Timer;
+
 import creatures.Fizzgig;
 import creatures.Landstrider;
 import creatures.Nurloc;
@@ -65,7 +67,12 @@ public class World {
             if (c.die()) {
                 creatures.remove(i);
                 i--;
-            } else {
+            }
+            else if (c.randomDeath()){
+                creatures.remove(i);
+                i--;
+            }
+            else {
                 Creature baby = c.reproduce();
                 if (baby != null) {
                     creatures.add(baby);
@@ -74,12 +81,18 @@ public class World {
         }
     }
 
+    public void worldTimer(){
+        Timer timer = new Timer(1000, e -> {
+            roll();
+        });
+        timer.start();
+
+    }
+
     public static void main(String[] args) {
         World world = new World();
         world.createCreature();
 
-        for (int i = 0; i < 100; i++) {
-            world.roll();
-        }
+        world.worldTimer();
     }
 }
