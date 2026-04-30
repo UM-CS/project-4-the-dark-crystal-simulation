@@ -9,8 +9,6 @@ import java.util.function.Supplier;
 
 import javax.swing.*;
 
-import javax.swing.Timer;
-
 import creatures.Fizzgig;
 import creatures.Landstrider;
 import creatures.Nurloc;
@@ -26,6 +24,7 @@ public class World extends JPanel{
     private final int GRID_COUNT = 50;
     private final int CELL_SIZE = 15;
     private Terrain[][] map = new Terrain[GRID_COUNT][GRID_COUNT];
+    private Color plantColor = new Color(29,168,57);
 
     ArrayList<Creature> creatures = new ArrayList<>();
     ArrayList<Food> food = new ArrayList<>();
@@ -58,7 +57,6 @@ public class World extends JPanel{
             repaint();
         }).start();
         
-        worldTimer();
     }
          
 
@@ -93,9 +91,9 @@ public class World extends JPanel{
         int y = r.nextInt(GRID_COUNT);
 
         if (r.nextBoolean()) {
-            food.add(new Food(x, y, "Plants"));
+            food.add(new Food(x, y, "Plants", plantColor));
         } else {
-            food.add(new Food(x, y, "Bugs"));
+            food.add(new Food(x, y, "Bugs", Color.CYAN));
         }
 
     }
@@ -127,7 +125,11 @@ public class World extends JPanel{
             c.lifeCycle();
             if (c.die()) {
                 creatures.remove(i--);
-            } else {
+            } 
+            else if(c.randomDeath()){
+                    creatures.remove(i--);
+            }
+            else{
                 if (creatures.size() < 50) {
                     Creature baby = c.reproduce();
                     if (baby != null) {
@@ -153,24 +155,17 @@ public class World extends JPanel{
             }
         }
         for (Creature a : creatures) a.draw(g);
-    }
-
-    public void worldTimer(){
-        Timer timer = new Timer(1000, e -> {
-            roll();
-        });
-        timer.start();
-
+        for (Food b : food) b.draw(g);
     }
 
     public static void main(String[] args) {
-        // World world = new World();
-        //world.createCreature();`
-        JFrame f = new JFrame("World");
+    
+        JFrame f = new JFrame("Dark Crystal World");
         f.add(new World(200));
         f.pack();
         f.setSize(765, 800);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
+}
 }
 
