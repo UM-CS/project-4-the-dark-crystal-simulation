@@ -41,29 +41,20 @@ public class World extends JPanel{
         // Registry of types
         Random r = new Random();
         List<Supplier<Creature>> types = Arrays.asList(
-            () -> new Fizzgig(r.nextInt(5), r.nextInt(GRID_COUNT), CELL_SIZE),
-            () -> new Landstrider(r.nextInt(5), r.nextInt(GRID_COUNT), CELL_SIZE),
-            () -> new Nurloc(r.nextInt(5), r.nextInt(GRID_COUNT), CELL_SIZE)
+            () -> new Fizzgig(r.nextInt(GRID_COUNT), r.nextInt(GRID_COUNT), CELL_SIZE),
+            () -> new Landstrider(r.nextInt(GRID_COUNT), r.nextInt(GRID_COUNT), CELL_SIZE),
+            () -> new Nurloc(r.nextInt(GRID_COUNT), r.nextInt(GRID_COUNT), CELL_SIZE)
+            
         );
 
         creatures = new ArrayList<>();
         for(int i=0; i<n; i++) creatures.add(types.get(r.nextInt(types.size())).get());
 
-        new Timer(200, e -> {
-            for (Creature creature : creatures){
-                if (creature instanceof reproduce) {
-                    ((reproduce) creature).reproduce(map);
-                }
-                if (creature instanceof die) {
-                    ((die) creature).die(map);
-                }
-                if (creature instanceof eat) {
-                    ((eat) creature).eat(map);
-                }
-                if(creature instanceof move) {
-                    ((move) creature).move(map);
-                }
-            }
+        new Timer(100, e -> {
+
+            roll(); 
+            eatFood();
+    
             repaint();
         }).start();
         
@@ -74,42 +65,32 @@ public class World extends JPanel{
     private void generateMap() {
         for (int x = 0; x < GRID_COUNT; x++) {
             for (int y = 0; y < GRID_COUNT; y++) {
-                // Create a normal river (columns 9 and 10)
-                if (x == 9 || x == 10) map[x][y] = Terrain.RIVER;
-                // Create a void river (columns 13 and 14)
-                else if (x == 13 || x == 14) map[x][y] = Terrain.FOREST;
-                else if (x == 20 || x == 21) map[x][y] = Terrain.SAND;
-                else map[x][y] = Terrain.GROUND;
+                map[x][y] = Terrain.GROUND;
+                if (x < 15 && y < 15) {
+                map[x][y] = Terrain.FOREST;
+                } else if (x > 35 && y > 35) {
+                map[x][y] = Terrain.SAND;
+                } else if (x > 20 && x < 25) {
+                map[x][y] = Terrain.RIVER;
+                }
             }
-
-            
         }
-
     }
-    
-
-
-
-    
-    public void updateMap() {
-    }
-
-
 
     public void createCreature() {
         int initialSpawn = 5;
         
         for (int i = 0; i < initialSpawn; i++) {
-            creatures.add(new Landstrider(r.nextInt(width), r.nextInt(height), 15));
-            creatures.add(new Fizzgig(r.nextInt(width), r.nextInt(height), 15));
-            creatures.add(new Nurloc(r.nextInt(width), r.nextInt(height), 15));
+            creatures.add(new Landstrider(r.nextInt(GRID_COUNT), r.nextInt(GRID_COUNT), 15));
+            creatures.add(new Fizzgig(r.nextInt(GRID_COUNT), r.nextInt(GRID_COUNT), 15));
+            creatures.add(new Nurloc(r.nextInt(GRID_COUNT), r.nextInt(GRID_COUNT), 15));
         }
     }
 
     
     public void spawnFood() {
-        int x = r.nextInt(100);
-        int y = r.nextInt(100);
+        int x = r.nextInt(GRID_COUNT);
+        int y = r.nextInt(GRID_COUNT);
 
         if (r.nextBoolean()) {
             food.add(new Food(x, y, "Plants"));
@@ -145,22 +126,19 @@ public class World extends JPanel{
             Creature c = creatures.get(i);
             c.lifeCycle();
             if (c.die()) {
-                creatures.remove(i);
-                i--;
-            }
-            else if (c.randomDeath()){
-                creatures.remove(i);
-                i--;
-            }
-            else {
-                Creature baby = c.reproduce();
-                if (baby != null) {
-                    creatures.add(baby);
+                creatures.remove(i--);
+            } else {
+                if (creatures.size() < 50) {
+                    Creature baby = c.reproduce();
+                    if (baby != null) {
+                        creatures.add(baby);
+                    }
                 }
             }
         }
     }
-     @Override
+    
+    @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         for (int x = 0; x < GRID_COUNT; x++) {
@@ -194,10 +172,5 @@ public class World extends JPanel{
         f.setSize(765, 800);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setVisible(true);
-
-        //for (int i = 0; i < 100; i++) {
-            //world.roll();
-        //}
-    }
 }
 

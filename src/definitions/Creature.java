@@ -7,6 +7,7 @@ import java.awt.Graphics;
 public class Creature {
 
     public int x, y;
+    private int vx = 0, vy = 0;
     public int health;
     public int age;
     public String name;
@@ -25,14 +26,29 @@ public class Creature {
     }
 
     public void lifeCycle() {
-        age++;
-        health--;
         move();
+        
+        if (Math.random() < 0.1) {
+            age++;
+            health--;
+        }
+        
+        
     }
     
     public void move() {
-        x += (int)(Math.random() * 3) - 1;
-        y += (int)(Math.random() * 3) - 1; 
+        if (Math.random() < .2) {
+            if (Math.random() < 0.10 || (vx == 0 && vy == 0)) {
+                vx += (int)(Math.random() * 3) - 1;
+                vy += (int)(Math.random() * 3) - 1;
+            }
+
+            x += vx;
+            y += vy;
+
+            x = Math.max(0, Math.min(x, 49));
+            y = Math.max(0, Math.min(y, 49));
+        }
     }
 
     public boolean die() {
@@ -53,6 +69,7 @@ public class Creature {
 
     public Creature reproduce() {
         if (age > 5 && health > 5) {
+            System.out.println(name + " has reproduced.");
             return new Creature(x, y, health, name, diet, color);
         }
         return null;
