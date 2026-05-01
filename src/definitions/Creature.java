@@ -13,6 +13,7 @@ public class Creature {
     public String name;
     public String diet;
     public Color color;
+    private double deathChance = 0.001;
 
     public Creature(int x, int y, int health, String name, String diet, Color color) {
         this.x = x;
@@ -31,8 +32,6 @@ public class Creature {
             age++;
             health--;
         }
-        
-        
     }
     
     public void move() {
@@ -52,11 +51,20 @@ public class Creature {
 
     public boolean die() {
         if (health <= 0 || age > 10) {
-        System.out.println(name + " has died.");
-        return true;
+            System.out.println(name + " has died.");
+            return true;
         }
         return false;
     }
+
+    public boolean randomDeath(){
+        if(Math.random() < deathChance){
+            System.out.println(name + " died randomly.");
+            return true;
+        }
+        return false;
+    }
+    
 
     public Creature reproduce() {
         if (age > 5 && health > 5) {
